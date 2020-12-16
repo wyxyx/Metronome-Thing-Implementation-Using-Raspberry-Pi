@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>BPM</title>
+<style>
+.center {
+    text-align: center;
+    border: 3px solid green;
+}
+</style>
+</head>
+<head>
+  <script>
+  function putBPM()
+  {
+    var x=document.getElementById('bvalue').value;
+    if (x==null || x==""){
+      alert("Please input a BPM value!");
+      return false;
+    }
+    else{
+      var data =  parseInt(x) ;
+      
+      fetch('http://localhost:8080/bpm', {
+      method: 'PUT', 
+      body: JSON.stringify(data), // data can be `string` or {object}!
+      }).then(response => response.json())
+      .catch(error => console.error('Error:', error))
+      .then(response => console.log('Success:', response));
+    }
+  }
+
+  function getBPM()
+  {
+    fetch('http://localhost:8080/bpm',{
+      method:'GET'
+    })
+    .then((res)=>{
+      return res.json();
+    })
+    .then((res)=>{
+      console.log(res)
+      document.getElementById("demo").innerHTML = res;
+    })
+
+  }
+
+
+  function deleteMinBPM()
+  {
+    alert("Delete the Min BPM value successfully!");
+    fetch('http://localhost:8080/bpm/min', {
+        method: 'DELETE'
+    }) 
+    .then(response => response.json())
+    .then(data => console.log(data)) 
+    .catch(err => console.log(err)) 
+  }
+
+  function getMinBPM()
+  {
+    fetch('http://localhost:8080/bpm/min',{
+      method:'GET'
+    })
+    .then((res)=>{
+      return res.json();
+    })
+    .then((res)=>{
+
+    var result = parseInt(res);
+    if(result == 2147483647)
+    {
+      document.getElementById("demo1").innerHTML = "none";
+    }
+    else{
+      console.log(res)
+      document.getElementById("demo1").innerHTML = res;
+    }
+    })
+
+  }
+
+  function deleteMaxBPM()
+  {
+    alert("Delete the Max BPM value successfully!");
+    fetch('http://localhost:8080/bpm/max', {
+        method: 'DELETE'
+    }) 
+    .then(response => response.json())
+    .then(data => console.log(data)) 
+    .catch(err => console.log(err))
+  }
+
+  function getMaxBPM()
+  {
+    fetch('http://localhost:8080/bpm/max',{
+      method:'GET'
+    })
+    .then((res)=>{
+      return res.json();
+    })
+    .then((res)=>{
+
+      var result = parseInt(res);
+    if(result == 0)
+    {
+      document.getElementById("demo2").innerHTML = "none";
+    }
+    else{
+      console.log(res)
+      document.getElementById("demo2").innerHTML = res;
+    }
+    })
+
+  }
+  </script>
+</head>
+<body>
+	  <div class="center">
+    <br></br>
+    BPM:<input type="text" id="bvalue">
+    <button onclick="putBPM()">put</button>
+	
+    <p><span>BPM: </span><span id="demo"> </span></p >
+    <button onclick="getBPM()">get BPM</button>
+    <br></br>
+    </div>
+
+    <div class="center">
+      <br></br>
+   
+      <button onclick="deleteMinBPM()">Delete Min BPM</button>
+    
+      <p><span>Min BPM: </span><span id="demo1"> </span></p >
+      <button onclick="getMinBPM()">get Min BPM</button>
+      
+      <br></br>
+    </div>
+    <div class="center">
+      <br></br>
+   
+      <button onclick="deleteMaxBPM()">Delete Max BPM</button>
+    
+      <p><span>Max BPM: </span><span id="demo2"> </span></p >
+      <button onclick="getMaxBPM()">get Max BPM</button>
+      <br></br>
+    </div>
+</body>
+</html>
